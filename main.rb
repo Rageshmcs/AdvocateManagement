@@ -105,8 +105,8 @@ while 1
     puts state + ":"
     puts "No cases found" unless State.statesRegistry[state].displayAllCases
     next
-	else
-	  break
+  else
+    break
   end
   Advocate.displayDetails
 end
