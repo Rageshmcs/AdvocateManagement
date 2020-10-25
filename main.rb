@@ -18,11 +18,11 @@ states.each do |state|
 end
 
 while 1
-	print  "Input: "
-	input = gets.chomp
+  print  "Input: "
+  input = gets.chomp
 
-	case input
-	when '1'
+  case input
+  when '1'
     print "Add an Advocate: "
     id = gets.chomp
     puts "Output:"
@@ -32,7 +32,7 @@ while 1
     else
       puts "Advocate #{id} already present" 
     end
-	when '2'
+  when '2'
     print "Senior Advocate ID: "
     seniorId = gets.chomp
     unless Advocate.advocates[seniorId]
@@ -45,7 +45,7 @@ while 1
     Advocate.advocates[seniorId].becomeSenior.joinJunior(juniorId)
     puts "Output:"
     puts "Advocate added #{juniorId} under #{seniorId}"
-	when '3'
+  when '3'
     print "Advocate ID: "
     id = gets.chomp
     print "Practicing State: "
@@ -57,7 +57,7 @@ while 1
     else
       puts "Cannot add #{state} for #{id}"
     end
-	when '4'
+  when '4'
     print "Advocate ID: "
     id = gets.chomp
     print "Case ID: "
@@ -71,7 +71,7 @@ while 1
     else
       puts "Cannot add #{caseId} for #{id}"
     end
-	when '5'
+  when '5'
     print "Advocate ID: "
     id = gets.chomp
     print "Case ID: "
