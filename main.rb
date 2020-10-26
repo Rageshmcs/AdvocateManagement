@@ -1,4 +1,4 @@
-require_relative 'advocate'
+require_relative 'printAdvocateInfo'
 require_relative 'case'
 
 # Options:
@@ -12,10 +12,7 @@ require_relative 'case'
 
 # add default states
 states = ['TN', 'AP', 'KA', 'KE']
-
-states.each do |state|
-  State.statesRegistry[state] = State.new(state)
-end
+State.addStates(states)
 
 while 1
   print  "Input: "
@@ -25,32 +22,31 @@ while 1
   when '1'
     print "Add an Advocate: "
     id = gets.chomp
+
     puts "Output:"
-    unless Advocate.advocates[id]
-      Advocate.advocates[id] = Advocate.new(id)
-      puts "Advocate added #{id}"
+    unless Advocate.getAdvocate(id)
+      puts "Advocate added #{id}" if Advocate.addAdvocate(id)
     else
       puts "Advocate #{id} already present" 
     end
   when '2'
     print "Senior Advocate ID: "
     seniorId = gets.chomp
-    unless Advocate.advocates[seniorId]
-      Advocate.advocates[seniorId] = Advocate.new(seniorId)
-      puts "Advocate added #{seniorId}"
+    unless Advocate.getAdvocate(seniorId)
+      puts "Advocate added #{seniorId}" if Advocate.addAdvocate(seniorId)
     end
     print "Junior ID: "
     juniorId = gets.chomp
 
-    Advocate.advocates[seniorId].becomeSenior.joinJunior(juniorId)
     puts "Output:"
-    puts "Advocate added #{juniorId} under #{seniorId}"
+    puts "Advocate added #{juniorId} under #{seniorId}" if Advocate.getAdvocate(seniorId).becomeSenior.joinJunior(juniorId)
   when '3'
     print "Advocate ID: "
     id = gets.chomp
     print "Practicing State: "
     state = gets.chomp.upcase
-    stateAdded = Advocate.advocates[id].addState(state)
+    stateAdded = Advocate.getAdvocate(id).addState(state)
+
     puts "Output:"
     if stateAdded
       puts "State #{state} added for #{id}"
@@ -64,9 +60,9 @@ while 1
     caseId = gets.chomp
     print "Practicing State: "
     state = gets.chomp.upcase
-    caseAdded = Advocate.advocates[id].addCase(caseId, state)
+
     puts "Output:"
-    if caseAdded
+    if Advocate.getAdvocate(id).addCase(caseId, state)
       puts "Case #{caseId} added for #{id}"
     else
       puts "Cannot add #{caseId} for #{id}"
@@ -78,9 +74,9 @@ while 1
     caseId = gets.chomp
     print "Practicing State: "
     state = gets.chomp.upcase
-    caseRejected = Advocate.advocates[id].addCase(caseId, state, true)
+
     puts "Output:"
-    if caseRejected
+    if Advocate.getAdvocate(id).addCase(caseId, state, true)
       puts "Case #{caseId} is added to the Block list for #{id}"
     else
       puts "Cannot add #{caseId} to the Block list for #{id}"
@@ -89,7 +85,7 @@ while 1
     puts "Output:"
     if Advocate.advocates != {}
       puts "Advocates:"
-      Advocate.displayAllAdvocates
+      PrintAdvocateInfo.displayAllAdvocates
     else
       puts "Advocates not found"
     end
@@ -97,16 +93,17 @@ while 1
   when '7'
     print "State Id: "
     state = gets.chomp.upcase
+
     puts "Output:"
-    unless State.statesRegistry[state]
+    unless State.getState(state)
       puts "State #{state} not found"
       next
     end
     puts state + ":"
-    puts "No cases found" unless State.statesRegistry[state].displayAllCases
+    puts "No cases found" unless State.getState(state).displayAllCases
     next
   else
     break
   end
-  Advocate.displayDetails
+  PrintAdvocateInfo.displayCurrentDetails
 end

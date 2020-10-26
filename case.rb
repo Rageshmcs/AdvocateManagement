@@ -13,4 +13,13 @@ class Case < State
   def self.casesRegistry
     @@casesRegistry
   end
+
+  def self.getCase(id)
+  	@@casesRegistry[id]
+  end
+
+  def self.addCase(id, state)
+  	@casesRegistry[id] = Case.new(id, state) unless Case.getCase(id)
+  	true
+  end
 end
