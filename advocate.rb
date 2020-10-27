@@ -43,6 +43,22 @@ class Advocate
     true
   end
 
+  def manageJunior(id)
+    Advocate.getAdvocate(id).seniorId = @id
+    Advocate.getAdvocate(id).juniorIds.each do |juniorId, value|
+      Advocate.getAdvocate(juniorId).seniorId = @id # junior's juniors' senior id change to the new senior
+      @juniorIds[juniorId] = 1
+
+      Advocate.getAdvocate(juniorId).states.each do |state, value| # extra practising states removal
+        Advocate.getAdvocate(juniorId).states.delete(state) unless @states[state]
+      end
+    end
+    Advocate.getAdvocate(id).juniorIds = {}
+    Advocate.getAdvocate(id).states.each do |state, value| # extra practising states removal
+      Advocate.getAdvocate(id).states.delete(state) unless @states[state]
+    end
+  end
+
   # state information
 
   def addState(state)
@@ -83,20 +99,16 @@ class Advocate
   end
 
   def allCases(state = nil)
-    outputCases = ""
-    @cases.each do |key, value|
-      if state
-        outputCases += " #{key}," if Case.getCase(key).state == state
-      else
-        outputCases += " #{key}-#{Case.getCase(key).state},"
-      end
-    end
-    outputCases.chop
+    self.caseList(@cases, state)
   end
 
   def allBlockedCases(state = nil)
+    self.caseList(@blockedCases, state)
+  end
+
+  def caseList(cases, state=nil)
     outputCases = ""
-    @blockedCases.each do |key, value|
+    cases.each do |key, value|
       if state
         outputCases += " #{key}," if Case.getCase(key).state == state
       else
@@ -104,23 +116,5 @@ class Advocate
       end
     end
     outputCases.chop
-  end
-
-  private
-
-  def manageJunior(id)
-    Advocate.getAdvocate(id).seniorId = @id
-    Advocate.getAdvocate(id).juniorIds.each do |juniorId, value|
-      Advocate.getAdvocate(juniorId).seniorId = @id # junior's juniors' senior id change to the new senior
-      @juniorIds[juniorId] = 1
-
-      Advocate.getAdvocate(juniorId).states.each do |state, value| # extra practising states removal
-        Advocate.getAdvocate(juniorId).states.delete(state) unless @states[state]
-      end
-    end
-    Advocate.getAdvocate(id).juniorIds = {}
-    Advocate.getAdvocate(id).states.each do |state, value| # extra practising states removal
-      Advocate.getAdvocate(id).states.delete(state) unless @states[state]
-    end
   end
 end

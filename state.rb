@@ -25,7 +25,7 @@ class State
   end
 
   def self.registerAdvocate(state, advocateId)
-    State.getState(state).advocates[@id] = 1
+    State.getState(state).advocates[advocateId] = 1
   end
 
   def displayAllCases

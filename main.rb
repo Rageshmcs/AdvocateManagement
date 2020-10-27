@@ -83,7 +83,7 @@ while 1
     end
   when '6'
     puts "Output:"
-    if Advocate.advocates != {}
+    if Advocate.advocatesRegistry != {}
       puts "Advocates:"
       PrintAdvocateInfo.displayAllAdvocates
     else
